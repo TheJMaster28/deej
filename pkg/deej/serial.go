@@ -65,6 +65,21 @@ func NewSerialIO(deej *Deej, logger *zap.SugaredLogger) (*SerialIO, error) {
 	return sio, nil
 }
 
+
+func (sio *SerialIO) Restart() {
+	const stopDelay = 50 * time.Millisecond
+
+	sio.Stop()
+
+	<-time.After(stopDelay)
+
+	if err := sio.Start(); err != nil {
+		sio.logger.Warnw("Failed to renew connection after parameter change", "error", err)
+	} else {
+		sio.logger.Debug("Renewed connection successfully")
+	}
+}
+
 // Start attempts to connect to our arduino chip
 func (sio *SerialIO) Start() error {
 

@@ -1,6 +1,8 @@
 package deej
 
 import (
+	"fmt"
+
 	"github.com/getlantern/systray"
 
 	"github.com/omriharel/deej/pkg/deej/icon"
@@ -71,7 +73,9 @@ func (d *Deej) initializeTray(onDone func()) {
 				case <-refreshSerial.ClickedCh:
 					logger.Info("Refresh Serial Session clicked, triggering serial refresh")
 
-					d.serial.Restart()	
+					d.serial.Restart()
+
+					d.notifier.Notify(fmt.Sprintf("Restarting Serial Session %s", d.config.ConnectionInfo.COMPort), "")
 				}
 			}
 		}()
